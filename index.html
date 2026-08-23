@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PACS ERP सदस्यता केवाईसी प्रपत्र</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #ccc;
+        }
+        h2 {
+            text-align: center;
+            text-decoration: underline;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+        .pacs-name-section {
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+        .pacs-name-section input {
+            border: none;
+            border-bottom: 1px dotted #000;
+            width: 250px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            outline: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .form-group label {
+            font-weight: bold;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group input[type="email"],
+        .form-group select {
+            flex: 1;
+            min-width: 150px;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .inline-group {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+            flex-wrap: wrap;
+        }
+        .inline-item {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        .inline-item label {
+            margin-right: 5px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .sub-section {
+            margin-left: 20px;
+            border-left: 2px solid #ddd;
+            padding-left: 15px;
+            margin-top: 10px;
+        }
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .grid-4 .inline-item {
+            width: 100%;
+        }
+        .note {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffcc00;
+            padding: 10px;
+            margin-top: 30px;
+            font-size: 14px;
+            font-style: italic;
+        }
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn-submit {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-submit:hover {
+            background-color: #004085;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>PACS ERP सदस्यता केवाईसी प्रपत्र</h2>
+    <div class="pacs-name-section">
+        पैक्स का नाम:- <input type="text" name="pacs_name" required> पैक्स
+    </div>
+
+    <form action="#" method="POST" enctype="multipart/form-data" novalidate>
+        
+        <!-- 1. सदस्य का नाम -->
+        <div class="form-group">
+            <label>1. सदस्य का नाम:-</label>
+            <input type="text" name="member_name" required>
+        </div>
+
+        <!-- 2. पिता / पति का नाम -->
+        <div class="form-group">
+            <label>2. पिता / पति का नाम:-</label>
+            <input type="text" name="guardian_name" required>
+        </div>
+
+        <!-- 3. पैक्स मतदाता सूची क्रम सं० और तिथि -->
+        <div class="form-group">
+            <label>3. पैक्स मतदाता सूची क्रम सं०:-</label>
+            <div class="inline-group">
+                <input type="text" name="voter_serial_no" style="flex: 0.5;">
+                <div class="inline-item">
+                    <label>सदस्य बनने की तिथि:-</label>
+                    <input type="date" name="membership_date">
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. आधार कार्ड की छायाप्रति और आधार सं० (अपडेटेड दोनों साइड अपलोड के साथ) -->
+        <div class="form-group" style="flex-direction: column; align-items: flex-start;">
+            <label style="max-width: 100%; white-space: normal; margin-bottom: 8px;">
+                4. सदस्य का आधार कार्ड की छायाप्रति (हस्ताक्षर / अंगूठे के निशान सहित अवश्य जमा किया जाना है) आधार सं०:-
+            </label>
+            <input type="number" name="aadhaar_no" pattern="[0-9]{12}" placeholder="12 अंकों का आधार नंबर दर्ज करें" style="width: 100%; margin-bottom: 10px;" required>
+            
+            <div class="aadhaar-upload-container">
+                <!-- सामने का भाग अपलोड/फोटो -->
+                <div class="upload-box">
+                    <div class="upload-icon">📸</div>
+                    <p>सामने का भाग अपलोड करें (Front Side)</p>
+                    <input type="file" name="aadhaar_front" accept="image/*" capture="environment" required>
+                </div>
+                <!-- पीछे का भाग अपलोड/फोटो -->
+                <div class="upload-box">
+                    <div class="upload-icon">📸</div>
+                    <p>पीछे का भाग अपलोड करें (Back Side)</p>
+                    <input type="file" name="aadhaar_back" accept="image/*" capture="environment" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. मोबाइल संख्या -->
+        <div class="form-group">
+            <label>5. मोबाइल संख्या:-</label>
+            <div class="inline-group">
+                <div class="inline-item">
+                    <label>(01).</label>
+                    <input type="text" name="mobile_1" pattern="[0-9]{10}" placeholder="पहला नंबर" required>
+                </div>
+                <div class="inline-item">
+                    <label>(02).</label>
+                    <input type="text" name="mobile_2" pattern="[0-9]{10}" placeholder="दूसरा नंबर (वैकल्पिक)">
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. जन्मतिथि, उम्र, वैवाहिक स्थिति -->
+        <div class="form-group">
+            <div class="inline-group">
+                <div class="inline-item">
+                    <label>6. जन्मतिथि:-</label>
+                    <input type="date" name="dob" required>
+                </div>
+                <div class="inline-item" style="flex: 0.5;">
+                    <label>उम्र:-</label>
+                    <input type="number" name="age" placeholder="वर्ष">
+                </div>
+                <div class="inline-item">
+                    <label>विवाहित / अविवाहित:-</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="marital_status" value="विवाहित"> विवाहित</label>
+                        <label><input type="radio" name="marital_status" value="अविवाहित"> अविवाहित</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. पति / पत्नी का नाम -->
+        <div class="form-group">
+            <label>7. पति / पत्नी का नाम:-</label>
+            <input type="text" name="spouse_name">
+        </div>
+
+        <!-- 8. धर्म -->
+        <div class="form-group">
+            <label>8. धर्म:-</label>
+            <input type="text" name="religion" placeholder="जैसे: हिंदू, मुस्लिम, सिख, ईसाई">
+        </div>
+
+        <!-- 9. जाति -->
+        <div class="form-group">
+            <label>9. जाति:-</label>
+            <input type="text" name="caste">
+        </div>
+
+        <!-- 10. श्रेणी -->
+        <div class="form-group">
+            <label>10. श्रेणी:-</label>
+            <select name="category">
+                <option value="">--चुनें--</option>
+                <option value="सामान्य">सामान्य (General)</option>
+                <option value="पिछड़ा वर्ग">पिछड़ा वर्ग (OBC)</option>
+                <option value="अत्यंत पिछड़ा वर्ग">अत्यंत पिछड़ा वर्ग (EBC)</option>
+                <option value="अनुसूचित जाति">अनुसूचित जाति (SC)</option>
+                <option value="अनुसूचित जनजाति">अनुसूचित जनजाति (ST)</option>
+            </select>
+        </div>
+
+        <!-- 11. व्यवसाय -->
+        <div class="form-group">
+            <label>11. व्यवसाय:-</label>
+            <input type="text" name="occupation" placeholder="जैसे: खेती, व्यापार, नौकरी">
+        </div>
+
+        <!-- 12. शैक्षणिक योग्यता -->
+        <div class="form-group">
+            <label>12. शैक्षणिक योग्यता:-</label>
+            <input type="text" name="education">
+        </div>
+
+        <!-- 13. सहकारी बैंक खाता सं० -->
+        <div class="form-group">
+            <label>13. सहकारी बैंक खाता सं०:-</label>
+            <input type="text" name="bank_account_no">
+        </div>
+
+        <!-- 14. ई मेल आईडी -->
+        <div class="form-group">
+            <label>14. ई मेल आईडी:-</label>
+            <input type="email" name="email">
+        </div>
+
+        <!-- 15. मकान सं० और पता -->
+        <div class="form-group">
+            <label>15. मकान सं०:-</label>
+            <div class="inline-group">
+                <input type="text" name="house_no" style="flex: 0.3;">
+                <div class="inline-item" style="flex: 1.7;">
+                    <label>पता:-</label>
+                    <input type="text" name="address" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16. नॉमिनी विवरण -->
+        <div class="form-group" style="align-items: flex-start; flex-direction: column;">
+            <label>16. नॉमिनी:-</label>
+            <input type="text" name="nominee_name" style="width: 100%; margin-bottom: 10px;" placeholder="नॉमिनी का नाम">
+            <div class="inline-group" style="width: 100%;">
+                <div class="inline-item">
+                    <label>क्या नॉमिनी पैक्स के मतदाता है यदि है तो मतदाता क्रम संख्या अंकित करें:-</label>
+                    <input type="text" name="nominee_voter_no">
+                </div>
+            </div>
+            <div class="inline-item" style="width: 100%; margin-top: 10px;">
+                <label>सदस्य के साथ रिश्ता:-</label>
+                <input type="text" name="nominee_relation">
+            </div>
+        </div>
+
+        <!-- 17. जमीन संबंधी ब्यौरा -->
+
+    <title>पैक्स सदस्य - जमीन संबंधी ब्यौरा (KYC)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 700px;
+            background: #ffffff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid #2c3e50;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .note {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 12px;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 25px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+        /* रकबा (Area) के लिए 3 कॉलम ग्रिड */
+        .rakba-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        /* चौहद्दी के लिए 2x2 ग्रिड */
+        .chauhadde-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .signature-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>पैक्स सदस्य - जमीन संबंधी ब्यौरा (KYC)</h2>
+    
+    
+
+    <form action="#" method="POST" novalidate>
+        
+        <!-- (क) डीड न० -->
+        <div class="form-group">
+            <label for="deed_no">(क) डीड न० (Deed No.):</label>
+            <input type="text" id="deed_no" name="deed_no" required placeholder="डीड नंबर दर्ज करें">
+        </div>
+
+        <!-- (ख) सर्वे सं० -->
+        <div class="form-group">
+            <label for="survey_no">(ख) सर्वे सं० / खाता-खेसरा (Survey No.):</label>
+            <input type="text" id="survey_no" name="survey_no" required placeholder="सर्वे या खाता-खेसरा नंबर दर्ज करें">
+        </div>
+
+        <!-- (ग) कुल भूमि का रकबा -->
+        <div class="form-group">
+            <label>(ग) कुल भूमि का रकबा:</label>
+            <div class="rakba-group">
+                <div>
+                    <input type="number" step="0.01" name="hectare" placeholder="हेक्टेयर">
+                </div>
+                <div>
+                    <input type="number" step="0.01" name="acre" placeholder="एकड़">
+                </div>
+                <div>
+                    <input type="number" step="0.01" name="dismil" placeholder="दिसमल">
+                </div>
+            </div>
+        </div>
+
+        <!-- (घ) भूमि का मूल्य -->
+        <div class="form-group">
+            <label for="land_value">(घ) भूमि का अनुमानित मूल्य (₹):</label>
+            <input type="number" id="land_value" name="land_value" placeholder="रुपये में मूल्य दर्ज करें">
+        </div>
+
+        <!-- (ङ) खेती योग्य भूमि -->
+        <div class="form-group">
+            <label for="cultivable_land">(ङ) खेती योग्य भूमि (एकड़/दिसमल में):</label>
+            <input type="text" id="cultivable_land" name="cultivable_land" placeholder="खेती योग्य भूमि का विवरण दें">
+        </div>
+
+        <!-- (च) स्वामित्व का प्रकार -->
+        <div class="form-group">
+            <label for="ownership_type">(च) स्वामित्व का प्रकार:</label>
+            <select id="ownership_type" name="ownership_type" required>
+                <option value="">-- चुनें --</option>
+                <option value="रैयती">रैयती (खुद की)</option>
+                <option value="पैतृक">पैतृक (खानदानी)</option>
+                <option value="बटाईदार">बटाईदार</option>
+                <option value="अन्य">अन्य</option>
+            </select>
+        </div>
+
+        <!-- (छ) चौहद्दी -->
+        <div class="form-group">
+            <label>(छ) चौहद्दी (Boundaries):</label>
+            <div class="chauhadde-group">
+                <div>
+                    <label style="font-size:14px; font-weight:normal;">उत्तर:</label>
+                    <input type="text" name="north" placeholder="उत्तर के पड़ोसी/रास्ता">
+                </div>
+                <div>
+                    <label style="font-size:14px; font-weight:normal;">दक्षिण:</label>
+                    <input type="text" name="south" placeholder="दक्षिण के पड़ोसी/रास्ता">
+                </div>
+                <div>
+                    <label style="font-size:14px; font-weight:normal;">पूर्व:</label>
+                    <input type="text" name="east" placeholder="पूर्व के पड़ोसी/रास्ता">
+                </div>
+                <div>
+                    <label style="font-size:14px; font-weight:normal;">पश्चिम:</label>
+                    <input type="text" name="west" placeholder="पश्चिम के पड़ोसी/रास्ता">
+                </div>
+            </div>
+        </div>
+
+        <!-- (ज) सिंचाई का माध्यम -->
+        <div class="form-group">
+            <label for="irrigation">(ज) सिंचाई का माध्यम:</label>
+            <select id="irrigation" name="irrigation">
+                <option value="">-- चुनें --</option>
+                <option value="नलकूप/बोरिंग">नलकूप / बोरिंग (Tube well)</option>
+                <option value="नहर">नहर (Canal)</option>
+                <option value="वर्षा आधारित">वर्षा आधारित (Rainfed)</option>
+                <option value="कुआं">कुआं</option>
+                <option value="अन्य">अन्य</option>
+            </select>
+        </div>
+
+        <!-- फॉर्म सबमिट और हस्ताक्षर -->
+        <div class="signature-section">
+            <div class="form-group" style="margin-bottom: 30px;">
+                <label for="signature_upload">सदस्य का हस्ताक्षर (डिजिटल अपलोड या अंगूठे का निशान):</label>
+                <input type="file" id="signature_upload" name="signature" accept="image/*">
+            </div>
+
+            <button type="submit" class="submit-btn">फॉर्म सबमिट करें</button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const forms = Array.from(document.querySelectorAll('form'));
+    const form = forms[forms.length - 1] || forms[0];
+    const storageKey = 'pacs_kyc_draft_v2';
+
+    function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => reject(reader.error || new Error('File read failed'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    async function collectFormData(includeFiles = true) {
+        const result = {};
+        for (const currentForm of forms) {
+            const formData = new FormData(currentForm);
+
+            for (const [key, value] of formData.entries()) {
+                const radioInputs = document.querySelectorAll(`input[name="${key}"]`);
+                const isRadioGroup = radioInputs.length > 0 && Array.from(radioInputs).every(input => input.type === 'radio');
+
+                if (isRadioGroup) {
+                    const selectedRadio = document.querySelector(`input[name="${key}"]:checked`);
+                    if (selectedRadio) result[key] = selectedRadio.value;
+                } else {
+                    const field = currentForm.elements.namedItem(key);
+                    if (field && field.type === 'checkbox') {
+                        if (!result[key]) result[key] = [];
+                        result[key].push(value);
+                    } else {
+                        result[key] = value;
+                    }
+                }
+            }
+        }
+
+        if (includeFiles) {
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+            for (const input of fileInputs) {
+                const files = input.files;
+                if (!files || files.length === 0) {
+                    result[input.name] = '';
+                    continue;
+                }
+
+                if (files.length === 1) {
+                    const file = files[0];
+                    const fileInfo = { name: file.name, type: file.type, size: file.size, lastModified: file.lastModified };
+                    const sizeLimit = 700 * 1024;
+                    if (file.size <= sizeLimit) {
+                        fileInfo.dataUrl = await readFileAsDataURL(file);
+                    }
+                    result[input.name] = fileInfo;
+                } else {
+                    result[input.name] = await Promise.all(Array.from(files).map(async (file) => {
+                        const fileInfo = { name: file.name, type: file.type, size: file.size, lastModified: file.lastModified };
+                        const sizeLimit = 700 * 1024;
+                        if (file.size <= sizeLimit) {
+                            fileInfo.dataUrl = await readFileAsDataURL(file);
+                        }
+                        return fileInfo;
+                    }));
+                }
+            }
+        }
+
+        result.savedAt = new Date().toISOString();
+        return result;
+    }
+
+    async function saveDraft() {
+        const snapshot = await collectFormData(false);
+        localStorage.setItem(storageKey, JSON.stringify(snapshot));
+        return snapshot;
+    }
+
+    if (!form) {
+        console.warn('No form found for saving data.');
+    } else {
+        let autoSaveTimer = null;
+
+        form.addEventListener('input', () => {
+            if (autoSaveTimer) clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(async () => {
+                saveDraft();
+            }, 600);
+        });
+
+        form.addEventListener('change', () => {
+            saveDraft();
+        });
+
+        forms.forEach(currentForm => currentForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const finalData = await collectFormData(true);
+            localStorage.setItem(storageKey, JSON.stringify(finalData));
+
+            alert('फॉर्म सफलतापूर्वक सेव हो गया है।');
+        }));
+    }
+</script>
+
+</body>
+</html>
