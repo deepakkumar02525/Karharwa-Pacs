@@ -203,28 +203,28 @@
         <div class="form-group">
             <div class="inline-group">
                 <div class="inline-item">
-                    <label>6. जन्मतिथि:-</label>
-                    <input type="date" name="dob" required>
+                    <label for="dob">6. जन्मतिथि:-</label>
+                    <input type="date" id="dob" name="dob" required>
                 </div>
                 <div class="inline-item" style="flex: 0.5;">
-                    <label>उम्र:-</label>
-                    <input type="number" name="age" placeholder="वर्ष">
-                </div> 
-                <br>
-                <div class="inline-item">
-                    <label>विवाहित / अविवाहित:-</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="marital_status" value="विवाहित"> विवाहित</label>
-                        <label><input type="radio" name="marital_status" value="अविवाहित"> अविवाहित</label>
-                    </div>
+                    <label for="age">उम्र:-</label>
+                    <input type="number" id="age" name="age" placeholder="वर्ष" readonly>
                 </div>
             </div>
         </div>
 
-        <!-- 7. पति / पत्नी का नाम -->
         <div class="form-group">
-            <label>7. पति / पत्नी का नाम:-</label>
-            <input type="text" name="spouse_name">
+            <label>विवाहित / अविवाहित:-</label>
+            <div class="radio-group">
+                <label><input type="radio" name="marital_status" id="married" value="विवाहित"> विवाहित</label>
+                <label><input type="radio" name="marital_status" id="unmarried" value="अविवाहित"> अविवाहित</label>
+            </div>
+        </div>
+
+        <!-- 7. पति / पत्नी का नाम -->
+        <div class="form-group" id="spouseGroup" style="display:none;">
+            <label for="spouse_name">7. पति / पत्नी का नाम:-</label>
+            <input type="text" id="spouse_name" name="spouse_name">
         </div>
 
         <!-- 8. धर्म -->
@@ -511,8 +511,6 @@
 
 <script>
     const forms = Array.from(document.querySelectorAll('form'));
-    const form = forms[forms.length - 1] || forms[0];
-    const storageKey = 'pacs_kyc_draft_v2';
 
     function readFileAsDataURL(file) {
         return new Promise((resolve, reject) => {
@@ -581,35 +579,106 @@
         return result;
     }
 
-    async function saveDraft() {
-        const snapshot = await collectFormData(false);
-        localStorage.setItem(storageKey, JSON.stringify(snapshot));
-        return snapshot;
+    function downloadJson(data, filename) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
     }
 
-    if (!form) {
+    // --- additional small form behaviours: auto-calc age from dob and show/hide spouse field ---
+    (function setupFormHelpers() {
+        const dobEl = document.getElementById('dob');
+        const ageEl = document.getElementById('age');
+        const spouseGroup = document.getElementById('spouseGroup');
+        const spouseInput = document.getElementById('spouse_name');
+
+        function calculateAgeFromDob(value) {
+            if (!value) return '';
+            const dob = new Date(value);
+            if (isNaN(dob)) return '';
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            return age >= 0 ? age : '';
+        }
+
+        function updateAge() {
+            if (!dobEl || !ageEl) return;
+            const val = dobEl.value;
+            const age = calculateAgeFromDob(val);
+            ageEl.value = age === '' ? '' : age;
+        }
+
+        function updateMaritalUI() {
+            const checked = document.querySelector('input[name="marital_status"]:checked');
+            const married = checked && checked.value === 'विवाहित';
+            if (spouseGroup) spouseGroup.style.display = married ? '' : 'none';
+            if (spouseInput) spouseInput.required = married;
+            if (!married && spouseInput) spouseInput.value = '';
+        }
+
+        if (dobEl) {
+            dobEl.addEventListener('change', updateAge);
+            // also calculate on page load if value present
+            updateAge();
+        }
+
+        const maritalRadios = document.querySelectorAll('input[name="marital_status"]');
+        if (maritalRadios && maritalRadios.length) {
+            maritalRadios.forEach(r => r.addEventListener('change', updateMaritalUI));
+            // set initial state
+            updateMaritalUI();
+        }
+    })();
+
+    if (forms.length === 0) {
         console.warn('No form found for saving data.');
     } else {
-        let autoSaveTimer = null;
-
-        form.addEventListener('input', () => {
-            if (autoSaveTimer) clearTimeout(autoSaveTimer);
-            autoSaveTimer = setTimeout(async () => {
-                saveDraft();
-            }, 600);
-        });
-
-        form.addEventListener('change', () => {
-            saveDraft();
-        });
-
         forms.forEach(currentForm => currentForm.addEventListener('submit', async function (event) {
             event.preventDefault();
 
             const finalData = await collectFormData(true);
-            localStorage.setItem(storageKey, JSON.stringify(finalData));
 
-            alert('फॉर्म सफलतापूर्वक सेव हो गया है।');
+            // Try to send to server
+            try {
+                const resp = await fetch('http://localhost:3000/saveForm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(finalData)
+                });
+
+                const body = await resp.json();
+                if (resp.ok && body && body.ok) {
+                    const status = document.createElement('div');
+                    status.textContent = 'Form saved on server. Files: ' + (body.html || '') + ' ' + (body.pdf || '');
+                    status.style.cssText = 'position:fixed;right:20px;bottom:20px;background:#2e7d32;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:10000;font-family:Arial,sans-serif;';
+                    document.body.appendChild(status);
+                    setTimeout(() => status.remove(), 6000);
+                    return;
+                }
+
+                throw new Error(body && body.error ? body.error : 'Server returned error');
+            } catch (err) {
+                console.warn('Server save failed, falling back to local download:', err);
+                // fallback: download JSON locally
+                const fileName = 'pacs_kyc_' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
+                downloadJson(finalData, fileName);
+
+                const status = document.createElement('div');
+                status.textContent = 'Server unavailable — JSON downloaded locally.';
+                status.style.cssText = 'position:fixed;right:20px;bottom:20px;background:#c0392b;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:10000;font-family:Arial,sans-serif;';
+                document.body.appendChild(status);
+                setTimeout(() => status.remove(), 6000);
+            }
         }));
     }
 </script>
