@@ -201,6 +201,23 @@
             width: 100%;
         }
 
+        .aadhaar-number-row {
+            align-items: center;
+            flex-direction: row !important;
+        }
+
+        .aadhaar-number-row label {
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .aadhaar-number-row input {
+            flex: 0 0 300px !important;
+            width: 300px !important;
+            max-width: 300px !important;
+            margin-bottom: 0 !important;
+        }
+
         .upload-box {
             min-width: 0;
         }
@@ -419,7 +436,7 @@
     <h2>PACS ERP सदस्यता केवाईसी प्रपत्र</h2>
     <form id="kycForm" action="save.php" method="POST" enctype="multipart/form-data" novalidate>
     <div class="pacs-name-section">
-        पैक्स का नाम:- <input type="text" name="pacs_name" value="कड़हरवा" required> पैक्स
+        पैक्स का नाम:- <input type="text" name="pacs_name" required> पैक्स
     </div>
         
         <!-- 1. सदस्य का नाम -->
@@ -459,11 +476,9 @@
         </div>
 
         <!-- 4. आधार कार्ड की छायाप्रति और आधार सं० (अपडेटेड दोनों साइड अपलोड के साथ) -->
-        <div class="form-group" style="flex-direction: column; align-items: flex-start;">
-            <label style="max-width: 100%; white-space: normal; margin-bottom: 8px;">
-                4. सदस्य का आधार कार्ड की छायाप्रति (हस्ताक्षर / अंगूठे के निशान सहित अवश्य जमा किया जाना है) आधार सं०:-
-            </label>
-            <input type="number" name="aadhaar_no" pattern="[0-9]{12}" placeholder="12 अंकों का आधार नंबर दर्ज करें" style="width: 100%; margin-bottom: 10px;" required>
+        <div class="form-group aadhaar-number-row">
+            <label for="aadhaar_no">आधार संख्या:-</label>
+            <input type="number" id="aadhaar_no" name="aadhaar_no" pattern="[0-9]{12}" placeholder="12 अंकों का आधार नंबर दर्ज करें" required>
             
             <div class="aadhaar-upload-container">
                 <!-- सामने का भाग अपलोड/फोटो -->
