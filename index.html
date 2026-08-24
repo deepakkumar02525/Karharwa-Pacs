@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PACS ERP सदस्यता केवाईसी प्रपत्र</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -77,6 +78,132 @@
             flex: 1;
             min-width: 120px;
         }
+
+        .membership-date-item {
+            min-width: 0;
+        }
+
+        .voter-date-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            align-items: center;
+        }
+
+        .voter-field {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            gap: 8px;
+        }
+
+        .voter-field label {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .voter-field input {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .voter-field:first-child {
+            gap: 6px;
+        }
+
+        .voter-field:first-child label {
+            font-size: 14px;
+        }
+
+        .voter-field:first-child input {
+            flex: 0 0 105px;
+            width: 105px;
+            min-width: 0;
+        }
+
+        .nominee-voter-field {
+            align-items: flex-start;
+            gap: 0;
+            flex: 0 1 auto;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .nominee-voter-field label {
+            flex: 0 1 auto;
+            min-width: 0;
+            white-space: nowrap;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-right: 0;
+        }
+
+        .nominee-voter-field input {
+            flex: 0 0 85px;
+            width: 85px;
+            max-width: 85px;
+            min-width: 0;
+        }
+
+        .nominee-name-field {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .nominee-name-field label {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .nominee-name-field input {
+            flex: 0 0 180px;
+            width: 180px;
+            max-width: 180px;
+            min-width: 0;
+        }
+
+        .nominee-section {
+            align-items: center !important;
+            flex-direction: row !important;
+        }
+
+        .nominee-section > label:first-child {
+            margin-right: 8px;
+        }
+
+        .nominee-section > input[name="nominee_name"] {
+            flex: 0 0 280px;
+            width: 280px;
+            max-width: 280px;
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+        .identity-upload-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .identity-upload-box {
+            min-width: 0;
+        }
+
+        .aadhaar-upload-container {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+            width: 100%;
+        }
+
+        .upload-box {
+            min-width: 0;
+        }
         .inline-item label {
             margin-right: 5px;
         }
@@ -143,9 +270,125 @@
             border: 1px solid #ccc;
         }
 
+        .preview-item {
+            min-width: 0;
+        }
+
+        .crop-btn {
+            margin-top: 6px;
+            padding: 6px 10px;
+            border: 1px solid #0056b3;
+            border-radius: 4px;
+            background: #fff;
+            color: #0056b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .crop-btn:hover {
+            background: #eef6ff;
+        }
+
+        .crop-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .crop-modal.is-open {
+            display: flex;
+        }
+
+        .crop-dialog {
+            width: min(760px, 100%);
+            max-height: 95vh;
+            overflow: auto;
+            padding: 16px;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .crop-dialog h3 {
+            margin: 0 0 12px;
+        }
+
+        .crop-image-wrap {
+            overflow: auto;
+            background: #222;
+            text-align: center;
+            max-height: 65vh;
+        }
+
+        #cropImage {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        .crop-tool-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .crop-tool-actions button {
+            padding: 7px 10px;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .crop-dialog-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+
+        .crop-dialog-actions button {
+            padding: 8px 14px;
+            border: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #cropApply {
+            background: #0056b3;
+            color: #fff;
+        }
+
         @media (max-width: 600px) {
             .file-preview {
                 grid-template-columns: 1fr;
+            }
+
+            .identity-upload-row {
+                grid-template-columns: 1fr;
+            }
+
+            .aadhaar-upload-container {
+                grid-template-columns: 1fr;
+            }
+
+            .membership-date-item {
+                left: 0;
+                margin-right: 0;
+            }
+
+            .voter-date-group {
+                grid-template-columns: 1fr;
+            }
+
+            .voter-field {
+                width: 100%;
             }
         }
 
@@ -163,7 +406,8 @@
             }
 
             .submit-section,
-            input[type="file"] {
+            input[type="file"],
+            .crop-btn {
                 display: none !important;
             }
         }
@@ -191,14 +435,26 @@
         </div>
 
         <!-- 3. पैक्स मतदाता सूची क्रम सं० और तिथि -->
-        <div class="form-group">
-            <label>3. पैक्स मतदाता सूची क्रम सं०:-</label>
-            <div class="inline-group">
-                <input type="text" name="voter_serial_no" style="flex: 0.5;">
-                <div class="inline-item">
-                    <label>सदस्य बनने की तिथि:-</label>
-                    <input type="date" name="membership_date">
-                </div>
+        <div class="form-group voter-date-group">
+            <div class="voter-field">
+                <label>3. पैक्स मतदाता सूची क्रम सं०:-</label>
+                <input type="text" name="voter_serial_no">
+            </div>
+            <div class="voter-field membership-date-item">
+                <label>सदस्य बनने की तिथि:-</label>
+                <input type="date" name="membership_date">
+            </div>
+        </div>
+
+        <!-- सदस्य का फोटो और हस्ताक्षर -->
+        <div class="identity-upload-row">
+            <div class="identity-upload-box">
+                <label for="member_photo">सदस्य का फोटो अपलोड करें:</label>
+                <input type="file" id="member_photo" name="member_photo" accept="image/*" capture="user" required>
+            </div>
+            <div class="identity-upload-box">
+                <label for="signature_upload">सदस्य का हस्ताक्षर या निशान अपलोड करें:</label>
+                <input type="file" id="signature_upload" name="signature" accept="image/*" capture="environment">
             </div>
         </div>
 
@@ -213,16 +469,23 @@
                 <!-- सामने का भाग अपलोड/फोटो -->
                 <div class="upload-box">
                     <div class="upload-icon">📸</div>
-                    <p>सामने का भाग अपलोड करें (Front Side)</p>
+                    <p>आधार का सामने वाला भाग अपलोड करें</p>
                     <input type="file" name="aadhaar_front" accept="image/*" capture="environment" required>
                 </div>
                 <!-- पीछे का भाग अपलोड/फोटो -->
                 <div class="upload-box">
                     <div class="upload-icon">📸</div>
-                    <p>पीछे का भाग अपलोड करें (Back Side)</p>
+                    <p>आधार का पीछे वाला भाग अपलोड करें</p>
                     <input type="file" name="aadhaar_back" accept="image/*" capture="environment" required>
                 </div>
             </div>
+
+        </div>
+
+        <!-- PAN Card -->
+        <div class="form-group" style="flex-direction: column; align-items: flex-start;">
+            <label for="pan_card">PAN Card की छायाप्रति अपलोड करें:</label>
+            <input type="file" id="pan_card" name="pan_card" accept="image/*" capture="environment" required>
         </div>
 
         <!-- 5. मोबाइल संख्या -->
@@ -330,13 +593,13 @@
         </div>
 
         <!-- 16. नॉमिनी विवरण -->
-        <div class="form-group" style="align-items: flex-start; flex-direction: column;">
+        <div class="form-group nominee-section" style="align-items: flex-start; flex-direction: column;">
             <label>16. नॉमिनी:-</label>
-            <input type="text" name="nominee_name" style="width: 100%; margin-bottom: 10px;" placeholder="नॉमिनी का नाम">
+            <input type="text" id="nominee_name" name="nominee_name" placeholder="नॉमिनी का नाम">
             <div class="inline-group" style="width: 100%;">
-                <div class="inline-item">
+                <div class="inline-item nominee-voter-field">
                     <label>क्या नॉमिनी पैक्स के मतदाता है यदि है तो मतदाता क्रम संख्या अंकित करें:-</label>
-                    <input type="text" name="nominee_voter_no">
+                    <input type="text" name="nominee_voter_no" style="flex: 0 0 105px; width: 105px; max-width: 105px; min-width: 0;">
                 </div>
             </div>
             <div class="inline-item" style="width: 100%; margin-top: 10px;">
@@ -437,6 +700,36 @@
         }
         .submit-btn:hover {
             background-color: #219653;
+        }
+
+        .export-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .excel-btn {
+            background-color: #1f7a4d;
+        }
+
+        .pdf-btn {
+            background-color: #b42318;
+        }
+
+        .export-btn:hover {
+            filter: brightness(0.9);
         }
     </style>
 </head>
@@ -543,17 +836,40 @@
                 <input type="file" id="land_receipt" name="land_receipt[]" accept="image/*" capture="environment" multiple>
             </div>
 
-            <div class="form-group" style="margin-bottom: 30px;">
-                <label for="signature_upload">सदस्य का हस्ताक्षर (डिजिटल अपलोड या अंगूठे का निशान):</label>
-                <input type="file" id="signature_upload" name="signature" accept="image/*" capture="environment">
-            </div>
-
             <button type="submit" class="submit-btn">फॉर्म सबमिट करें</button>
+            <div class="export-actions">
+                <button type="button" class="export-btn excel-btn" data-export="excel">Excel में सेव करें</button>
+                <button type="button" class="export-btn pdf-btn" data-export="pdf">PDF में सेव करें</button>
+            </div>
         </div>
 
     </form>
 </div>
 
+<div class="crop-modal" id="cropModal" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+    <div class="crop-dialog">
+        <h3 id="cropTitle">फोटो क्रॉप करें</h3>
+        <div class="crop-image-wrap">
+            <img id="cropImage" alt="क्रॉप करने के लिए चुनी गई फोटो">
+        </div>
+        <div class="crop-tool-actions">
+            <button type="button" data-crop-action="zoom-in">+ Zoom</button>
+            <button type="button" data-crop-action="zoom-out">- Zoom</button>
+            <button type="button" data-crop-action="rotate-left">↶ Rotate</button>
+            <button type="button" data-crop-action="rotate-right">↷ Rotate</button>
+            <button type="button" data-crop-action="auto-crop">ऑटो क्रॉप</button>
+            <button type="button" data-crop-action="face-crop">Face Auto-Crop</button>
+            <button type="button" data-crop-action="reset">Reset</button>
+        </div>
+        <div class="crop-dialog-actions">
+            <button type="button" id="cropCancel">रद्द करें</button>
+            <button type="button" id="cropApply">क्रॉप सेव करें</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
 <script>
     const forms = Array.from(document.querySelectorAll('form'));
 
@@ -582,17 +898,250 @@
                         return;
                     }
 
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
                     const image = document.createElement('img');
                     image.alt = input.labels?.[0]?.textContent?.trim() || 'अपलोड की गई फाइल';
                     image.src = URL.createObjectURL(file);
                     image.addEventListener('load', () => URL.revokeObjectURL(image.src), { once: true });
-                    preview.appendChild(image);
+                    previewItem.appendChild(image);
+                    const cropButton = document.createElement('button');
+                    cropButton.type = 'button';
+                    cropButton.className = 'crop-btn';
+                    cropButton.textContent = 'क्रॉप करें';
+                    cropButton.addEventListener('click', () => openCropTool(input, file, files.indexOf(file)));
+                    previewItem.appendChild(cropButton);
+                    preview.appendChild(previewItem);
                 });
             });
         });
     }
 
+    const cropModal = document.getElementById('cropModal');
+    const cropImageElement = document.getElementById('cropImage');
+    let cropper = null;
+    let cropFileInput = null;
+    let cropFileIndex = 0;
+    let faceCascadePromise = null;
+
+    function openCropTool(input, file, fileIndex) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            cropImageElement.src = reader.result;
+            cropImageElement.onload = () => {
+                cropFileInput = input;
+                cropFileIndex = fileIndex;
+                cropModal.classList.add('is-open');
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(cropImageElement, {
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 0.85,
+                    responsive: true,
+                    background: false,
+                    movable: true,
+                    zoomable: true,
+                    rotatable: true
+                });
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function autoCropDocument() {
+        if (!cropper) return;
+        if (typeof cv === 'undefined' || !cv.Mat) {
+            alert('ऑटो क्रॉप तैयार हो रहा है। कृपया थोड़ी देर बाद फिर दबाएँ।');
+            return;
+        }
+
+        const imageData = cropper.getImageData();
+        const sourceCanvas = document.createElement('canvas');
+        sourceCanvas.width = imageData.naturalWidth;
+        sourceCanvas.height = imageData.naturalHeight;
+        sourceCanvas.getContext('2d').drawImage(cropImageElement, 0, 0, sourceCanvas.width, sourceCanvas.height);
+
+        let source;
+        let gray;
+        let edges;
+        let contours;
+        let hierarchy;
+        try {
+            source = cv.imread(sourceCanvas);
+            gray = new cv.Mat();
+            edges = new cv.Mat();
+            contours = new cv.MatVector();
+            hierarchy = new cv.Mat();
+            cv.cvtColor(source, gray, cv.COLOR_RGBA2GRAY);
+            cv.GaussianBlur(gray, gray, new cv.Size(5, 5), 0);
+            cv.Canny(gray, edges, 50, 150);
+            cv.findContours(edges, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+            let largestArea = 0;
+            let bestRect = { x: source.cols * 0.05, y: source.rows * 0.05, width: source.cols * 0.9, height: source.rows * 0.9 };
+            for (let index = 0; index < contours.size(); index++) {
+                const rect = cv.boundingRect(contours.get(index));
+                const area = rect.width * rect.height;
+                if (area > largestArea && area > source.cols * source.rows * 0.25) {
+                    largestArea = area;
+                    bestRect = rect;
+                }
+            }
+            cropper.setData(bestRect);
+        } finally {
+            if (source) source.delete();
+            if (gray) gray.delete();
+            if (edges) edges.delete();
+            if (contours) contours.delete();
+            if (hierarchy) hierarchy.delete();
+        }
+    }
+
+    async function autoCropFace() {
+        if (!cropper) return;
+        if (typeof cv === 'undefined' || !cv.Mat) {
+            alert('Face Auto-Crop तैयार हो रहा है। कृपया थोड़ी देर बाद फिर दबाएँ।');
+            return;
+        }
+
+        try {
+            if (!faceCascadePromise) {
+                faceCascadePromise = fetch('https://raw.githubusercontent.com/opencv/opencv/4.x/data/haarcascades/haarcascade_frontalface_default.xml')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Face model download failed');
+                        return response.arrayBuffer();
+                    })
+                    .then(buffer => {
+                        cv.FS_createDataFile('/', 'face.xml', new Uint8Array(buffer), true, false, false);
+                    });
+            }
+            await faceCascadePromise;
+
+            const imageData = cropper.getImageData();
+            const sourceCanvas = document.createElement('canvas');
+            sourceCanvas.width = imageData.naturalWidth;
+            sourceCanvas.height = imageData.naturalHeight;
+            sourceCanvas.getContext('2d').drawImage(cropImageElement, 0, 0, sourceCanvas.width, sourceCanvas.height);
+            const source = cv.imread(sourceCanvas);
+            const gray = new cv.Mat();
+            const faces = new cv.RectVector();
+            const classifier = new cv.CascadeClassifier();
+            cv.cvtColor(source, gray, cv.COLOR_RGBA2GRAY);
+            classifier.load('face.xml');
+            classifier.detectMultiScale(gray, faces, 1.1, 3, 0);
+
+            if (faces.size() === 0) {
+                alert('इस फोटो में चेहरा नहीं मिला। कृपया साफ़ और सामने से फोटो चुनें।');
+            } else {
+                let bestFace = faces.get(0);
+                for (let index = 1; index < faces.size(); index++) {
+                    const face = faces.get(index);
+                    if (face.width * face.height > bestFace.width * bestFace.height) bestFace = face;
+                }
+                const horizontalPadding = bestFace.width * 0.55;
+                const verticalPadding = bestFace.height * 0.75;
+                cropper.setData({
+                    x: Math.max(0, bestFace.x - horizontalPadding),
+                    y: Math.max(0, bestFace.y - verticalPadding),
+                    width: Math.min(source.cols, bestFace.x + bestFace.width + horizontalPadding) - Math.max(0, bestFace.x - horizontalPadding),
+                    height: Math.min(source.rows, bestFace.y + bestFace.height + verticalPadding) - Math.max(0, bestFace.y - verticalPadding)
+                });
+            }
+            source.delete();
+            gray.delete();
+            faces.delete();
+            classifier.delete();
+        } catch (error) {
+            console.warn('Face detection failed:', error);
+            alert('Face Auto-Crop अभी उपलब्ध नहीं है। इंटरनेट कनेक्शन जाँचकर फिर प्रयास करें।');
+        }
+    }
+
+    document.querySelectorAll('[data-crop-action]').forEach(button => {
+        button.addEventListener('click', () => {
+            if (!cropper) return;
+            const action = button.dataset.cropAction;
+            if (action === 'zoom-in') cropper.zoom(0.1);
+            if (action === 'zoom-out') cropper.zoom(-0.1);
+            if (action === 'rotate-left') cropper.rotate(-90);
+            if (action === 'rotate-right') cropper.rotate(90);
+            if (action === 'auto-crop') autoCropDocument();
+            if (action === 'face-crop') autoCropFace();
+            if (action === 'reset') cropper.reset();
+        });
+    });
+
+    document.getElementById('cropCancel').addEventListener('click', () => {
+        cropModal.classList.remove('is-open');
+        if (cropper) cropper.destroy();
+        cropper = null;
+    });
+
+    document.getElementById('cropApply').addEventListener('click', () => {
+        if (!cropper || !cropFileInput) return;
+        cropper.getCroppedCanvas({ maxWidth: 2400, maxHeight: 2400 }).toBlob(blob => {
+            const croppedFile = new File([blob], cropFileInput.files[cropFileIndex].name, { type: 'image/jpeg' });
+            const files = Array.from(cropFileInput.files);
+            files[cropFileIndex] = croppedFile;
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            cropFileInput.files = dataTransfer.files;
+            cropFileInput.dispatchEvent(new Event('change', { bubbles: true }));
+            cropModal.classList.remove('is-open');
+            cropper.destroy();
+            cropper = null;
+        }, 'image/jpeg', 0.92);
+    });
+
     setupFilePreviews();
+
+    function getFormValue(form, fieldName) {
+        const field = form.elements.namedItem(fieldName);
+        if (!field) return '';
+        if (field instanceof RadioNodeList) {
+            return field.value || '';
+        }
+        if (field.type === 'file') {
+            return Array.from(field.files || []).map(file => file.name).join(', ');
+        }
+        return field.value || '';
+    }
+
+    function escapeExcelCell(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function exportFormToExcel(form) {
+        const rows = Array.from(form.elements)
+            .filter(field => field.name && field.type !== 'submit' && field.type !== 'button' &&
+                (field.type !== 'radio' && field.type !== 'checkbox' || field.checked))
+            .map(field => `<tr><td>${escapeExcelCell(field.labels?.[0]?.textContent?.trim() || field.name)}</td><td>${escapeExcelCell(getFormValue(form, field.name))}</td></tr>`)
+            .join('');
+        const workbook = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><table><thead><tr><th>विवरण</th><th>मान</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+        const blob = new Blob([`\ufeff${workbook}`], { type: 'application/vnd.ms-excel;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `PACS_KYC_${getFormValue(form, 'member_name') || 'Form'}.xls`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    function saveFormAsPdf(form) {
+        document.title = 'PACS KYC - ' + (getFormValue(form, 'member_name') || 'Form');
+        window.print();
+    }
+
+    document.querySelectorAll('[data-export="excel"]').forEach(button => {
+        button.addEventListener('click', () => exportFormToExcel(button.closest('form')));
+    });
+
+    document.querySelectorAll('[data-export="pdf"]').forEach(button => {
+        button.addEventListener('click', () => saveFormAsPdf(button.closest('form')));
+    });
 
     // --- additional small form behaviours: auto-calc age from dob and show/hide spouse field ---
     (function setupFormHelpers() {
