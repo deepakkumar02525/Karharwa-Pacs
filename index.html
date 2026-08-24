@@ -43,6 +43,7 @@
             font-weight: bold;
             outline: none;
         }
+
         .form-group {
             margin-bottom: 15px;
             display: flex;
@@ -218,6 +219,46 @@
             margin-bottom: 0 !important;
         }
 
+        .pan-mobile-row {
+            display: grid;
+            grid-template-columns: minmax(240px, 0.8fr) minmax(300px, 1fr);
+            gap: 15px;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .pan-upload-section {
+            margin-bottom: 0 !important;
+        }
+
+        .mobile-number-section {
+            display: block;
+            margin-bottom: 0;
+        }
+
+        .mobile-number-section > label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .mobile-number-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .mobile-number-fields .inline-item {
+            width: 100%;
+        }
+
+        .address-field-container {
+            min-width: 0;
+        }
+
+        .house-address-group {
+            min-width: 0;
+        }
+
         .upload-box {
             min-width: 0;
         }
@@ -273,9 +314,52 @@
         .file-preview {
             margin-top: 10px;
             width: 100%;
+            min-height: 72px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px dashed #aaa;
+            border-radius: 5px;
+            background: #fafafa;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
+        }
+
+        .file-preview-empty {
+            grid-column: 1 / -1;
+            align-self: center;
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .file-upload-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .file-upload-actions button {
+            padding: 7px 12px;
+            border: 1px solid #0056b3;
+            border-radius: 4px;
+            background: #fff;
+            color: #0056b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .file-upload-actions button:hover {
+            background: #eef6ff;
+        }
+
+        input.file-source-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .file-preview img {
@@ -395,6 +479,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .pan-mobile-row {
+                grid-template-columns: 1fr;
+            }
+
             .membership-date-item {
                 left: 0;
                 margin-right: 0;
@@ -424,7 +512,8 @@
 
             .submit-section,
             input[type="file"],
-            .crop-btn {
+            .crop-btn,
+            .file-upload-actions {
                 display: none !important;
             }
         }
@@ -497,23 +586,25 @@
 
         </div>
 
-        <!-- PAN Card -->
-        <div class="form-group" style="flex-direction: column; align-items: flex-start;">
-            <label for="pan_card">PAN Card की छायाप्रति अपलोड करें:</label>
-            <input type="file" id="pan_card" name="pan_card" accept="image/*" capture="environment" required>
-        </div>
+        <div class="pan-mobile-row">
+            <!-- PAN Card -->
+            <div class="form-group pan-upload-section" style="flex-direction: column; align-items: flex-start;">
+                <label for="pan_card">PAN Card की छायाप्रति अपलोड करें:</label>
+                <input type="file" id="pan_card" name="pan_card" accept="image/*" capture="environment" required>
+            </div>
 
-        <!-- 5. मोबाइल संख्या -->
-        <div class="form-group">
-            <label>5. मोबाइल संख्या:-</label>
-            <div class="inline-group">
-                <div class="inline-item">
-                    <label>(01).</label>
-                    <input type="text" name="mobile_1" pattern="[0-9]{10}" placeholder="पहला नंबर" required>
-                </div>
-                <div class="inline-item">
-                    <label>(02).</label>
-                    <input type="text" name="mobile_2" pattern="[0-9]{10}" placeholder="दूसरा नंबर (वैकल्पिक)">
+            <!-- 5. मोबाइल संख्या -->
+            <div class="form-group mobile-number-section">
+                <label>5. मोबाइल संख्या:-</label>
+                <div class="mobile-number-fields">
+                    <div class="inline-item">
+                        <label>(01).</label>
+                        <input type="text" name="mobile_1" pattern="[0-9]{10}" placeholder="पहला नंबर" required>
+                    </div>
+                    <div class="inline-item">
+                        <label>(02).</label>
+                        <input type="text" name="mobile_2" pattern="[0-9]{10}" placeholder="दूसरा नंबर (वैकल्पिक)">
+                    </div>
                 </div>
             </div>
         </div>
@@ -598,9 +689,9 @@
         <!-- 15. मकान सं० और पता -->
         <div class="form-group">
             <label>15. मकान सं०:-</label>
-            <div class="inline-group">
+            <div class="inline-group house-address-group">
                 <input type="text" name="house_no" style="flex: 0.3;">
-                <div class="inline-item" style="flex: 1.7;">
+                <div class="inline-item address-field-container" style="flex: 1.7;">
                     <label>पता:-</label>
                     <input type="text" name="address" required>
                 </div>
@@ -614,7 +705,7 @@
             <div class="inline-group" style="width: 100%;">
                 <div class="inline-item nominee-voter-field">
                     <label>क्या नॉमिनी पैक्स के मतदाता है यदि है तो मतदाता क्रम संख्या अंकित करें:-</label>
-                    <input type="text" name="nominee_voter_no" style="flex: 0 0 105px; width: 105px; max-width: 105px; min-width: 0;">
+                    <input type="text" name="nominee_voter_no" style="flex: 0 0 105px; width: 120px; max-width: 120px; min-width: 0;">
                 </div>
             </div>
             <div class="inline-item" style="width: 100%; margin-top: 10px;">
@@ -779,7 +870,7 @@
                     <input type="number" step="0.01" name="acre" placeholder="एकड़">
                 </div>
                 <div>
-                    <input type="number" step="0.01" name="dismil" placeholder="दिसमल">
+                    <input type="number" step="0.01" name="dismil" placeholder="डिसमल">
                 </div>
             </div>
         </div>
@@ -883,6 +974,163 @@
     </div>
 </div>
 
+<style>
+    @media (max-width: 600px) {
+        body {
+            padding: 8px;
+            overflow-x: hidden;
+        }
+
+        .form-container {
+            width: 100%;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-container h2 {
+            font-size: 20px;
+        }
+
+        .pacs-name-section {
+            font-size: 16px;
+        }
+
+        .pacs-name-section input {
+            width: min(100%, 180px);
+        }
+
+        .form-group,
+        .voter-date-group,
+        .identity-upload-row,
+        .pan-mobile-row,
+        .aadhaar-upload-container {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100%;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        .inline-group,
+        .inline-item,
+        .rakba-group,
+        .chauhadde-group {
+            width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box;
+        }
+
+        .rakba-group {
+            grid-template-columns: 1fr !important;
+        }
+
+        .chauhadde-group {
+            grid-template-columns: 1fr !important;
+        }
+
+        .chauhadde-group > div {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .form-group > label,
+        .voter-field label,
+        .identity-upload-box label,
+        .upload-box p {
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        .voter-field,
+        .membership-date-item,
+        .nominee-voter-field,
+        .nominee-name-field,
+        .mobile-number-fields .inline-item {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .voter-field input,
+        .membership-date-item input,
+        .nominee-voter-field input,
+        .nominee-section > input[name="nominee_name"],
+        .mobile-number-fields input,
+        .aadhaar-number-row input {
+            flex: 1 1 auto !important;
+            width: auto !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .inline-item > input,
+        .inline-item > select {
+            flex: 1 1 auto !important;
+            width: auto !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        .address-field-container {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            width: 100% !important;
+            flex: 1 1 auto !important;
+        }
+
+        .house-address-group {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            width: 100% !important;
+        }
+
+        .house-address-group > input[name="house_no"] {
+            align-self: flex-start;
+            flex: 0 0 90px !important;
+            width: 90px !important;
+            max-width: 90px !important;
+            min-width: 0 !important;
+        }
+
+        .address-field-container label {
+            width: 100%;
+            margin-bottom: 4px;
+        }
+
+        .address-field-container input[name="address"] {
+            width: 100% !important;
+            flex: 1 1 auto !important;
+        }
+
+        .nominee-voter-field label {
+            flex: 1 1 auto;
+            white-space: normal;
+        }
+
+        .file-upload-actions {
+            width: 100%;
+        }
+
+        .file-upload-actions button {
+            flex: 1 1 140px;
+        }
+
+        .file-preview {
+            width: 100%;
+            grid-template-columns: 1fr;
+        }
+
+        .upload-box,
+        .identity-upload-box {
+            width: 100%;
+        }
+    }
+</style>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
 <script>
@@ -899,13 +1147,72 @@
 
     function setupFilePreviews() {
         document.querySelectorAll('input[type="file"]').forEach(input => {
+            const uploadPlaceholder = getUploadPlaceholder(input);
+            input.classList.add('file-source-input');
+            const uploadActions = document.createElement('div');
+            uploadActions.className = 'file-upload-actions';
+            const galleryButton = document.createElement('button');
+            galleryButton.type = 'button';
+            galleryButton.textContent = 'गैलरी से चुनें';
+            galleryButton.addEventListener('click', () => {
+                const galleryInput = document.createElement('input');
+                galleryInput.type = 'file';
+                galleryInput.accept = input.accept || 'image/*';
+                galleryInput.multiple = input.multiple;
+                galleryInput.addEventListener('change', () => {
+                    const selectedFiles = Array.from(galleryInput.files || []);
+                    const existingFiles = input.multiple ? Array.from(input.files || []) : [];
+                    const dataTransfer = new DataTransfer();
+                    (input.multiple ? existingFiles.concat(selectedFiles) : selectedFiles).forEach(file => dataTransfer.items.add(file));
+                    input.files = dataTransfer.files;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                    galleryInput.remove();
+                }, { once: true });
+                document.body.appendChild(galleryInput);
+                galleryInput.click();
+            });
+            const cameraButton = document.createElement('button');
+            cameraButton.type = 'button';
+            cameraButton.textContent = 'कैमरा से लें';
+            cameraButton.addEventListener('click', () => {
+                const cameraInput = document.createElement('input');
+                cameraInput.type = 'file';
+                cameraInput.accept = input.accept || 'image/*';
+                const captureMode = input.name === 'member_photo' ? 'user' : 'environment';
+                cameraInput.capture = captureMode;
+                cameraInput.setAttribute('capture', captureMode);
+                cameraInput.multiple = input.multiple;
+                cameraInput.addEventListener('change', () => {
+                    const selectedFiles = Array.from(cameraInput.files || []);
+                    const existingFiles = input.multiple ? Array.from(input.files || []) : [];
+                    const dataTransfer = new DataTransfer();
+                    (input.multiple ? existingFiles.concat(selectedFiles) : selectedFiles).forEach(file => dataTransfer.items.add(file));
+                    input.files = dataTransfer.files;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                    cameraInput.remove();
+                }, { once: true });
+                document.body.appendChild(cameraInput);
+                cameraInput.click();
+            });
+            uploadActions.append(galleryButton, cameraButton);
             const preview = document.createElement('div');
             preview.className = 'file-preview';
+            const emptyPreview = document.createElement('div');
+            emptyPreview.className = 'file-preview-empty';
+            emptyPreview.textContent = uploadPlaceholder;
+            preview.appendChild(emptyPreview);
             input.insertAdjacentElement('afterend', preview);
+            preview.insertAdjacentElement('afterend', uploadActions);
 
             input.addEventListener('change', () => {
                 preview.replaceChildren();
                 const files = input.files ? Array.from(input.files) : [];
+                if (files.length === 0) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'file-preview-empty';
+                    emptyState.textContent = uploadPlaceholder;
+                    preview.appendChild(emptyState);
+                }
                 files.forEach(file => {
                     if (!file.type.startsWith('image/')) {
                         preview.appendChild(document.createTextNode(file.name));
@@ -930,6 +1237,18 @@
                 });
             });
         });
+    }
+
+    function getUploadPlaceholder(input) {
+        const placeholders = {
+            member_photo: 'सदस्य का फोटो यहां दिखेगा',
+            signature: 'सदस्य का हस्ताक्षर या निशान यहां दिखेगा',
+            aadhaar_front: 'आधार का सामने वाला भाग यहां दिखेगा',
+            aadhaar_back: 'आधार का पीछे वाला भाग यहां दिखेगा',
+            pan_card: 'PAN Card यहां दिखेगा',
+            'land_receipt[]': 'जमीन की रसीद यहां दिखेगी'
+        };
+        return placeholders[input.name] || 'फाइल यहां दिखेगी';
     }
 
     const cropModal = document.getElementById('cropModal');
