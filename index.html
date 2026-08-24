@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karharwa Pacs</title>
+    <title>PACS ERP सदस्यता केवाईसी प्रपत्र</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -125,17 +125,58 @@
         .btn-submit:hover {
             background-color: #004085;
         }
+
+        .file-preview {
+            margin-top: 10px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .file-preview img {
+            display: block;
+            max-width: 100%;
+            max-height: 420px;
+            width: 100%;
+            object-fit: contain;
+            border: 1px solid #ccc;
+        }
+
+        @media (max-width: 600px) {
+            .file-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                padding: 0;
+            }
+
+            .form-container {
+                max-width: none;
+                border: 0;
+                box-shadow: none;
+                padding: 0;
+            }
+
+            .submit-section,
+            input[type="file"] {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="form-container">
     <h2>PACS ERP सदस्यता केवाईसी प्रपत्र</h2>
+    <form id="kycForm" action="save.php" method="POST" enctype="multipart/form-data" novalidate>
     <div class="pacs-name-section">
-        पैक्स का नाम:- <input type="text" name="pacs_name" required> पैक्स
+        पैक्स का नाम:- <input type="text" name="pacs_name" value="कड़हरवा" required> पैक्स
     </div>
-
-    <form action="#" method="POST" enctype="multipart/form-data" novalidate>
         
         <!-- 1. सदस्य का नाम -->
         <div class="form-group">
@@ -406,7 +447,6 @@
     
     
 
-    <form action="#" method="POST" novalidate>
         
         <!-- (क) डीड न० -->
         <div class="form-group">
@@ -499,8 +539,13 @@
         <!-- फॉर्म सबमिट और हस्ताक्षर -->
         <div class="signature-section">
             <div class="form-group" style="margin-bottom: 30px;">
+                <label for="land_receipt">जमीन का रसीद अपलोड करें:</label>
+                <input type="file" id="land_receipt" name="land_receipt[]" accept="image/*" capture="environment" multiple>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 30px;">
                 <label for="signature_upload">सदस्य का हस्ताक्षर (डिजिटल अपलोड या अंगूठे का निशान):</label>
-                <input type="file" id="signature_upload" name="signature" accept="image/*">
+                <input type="file" id="signature_upload" name="signature" accept="image/*" capture="environment">
             </div>
 
             <button type="submit" class="submit-btn">फॉर्म सबमिट करें</button>
@@ -521,75 +566,33 @@
         });
     }
 
-    async function collectFormData(includeFiles = true) {
-        const result = {};
-        for (const currentForm of forms) {
-            const formData = new FormData(currentForm);
+    function setupFilePreviews() {
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            const preview = document.createElement('div');
+            preview.className = 'file-preview';
+            input.insertAdjacentElement('afterend', preview);
 
-            for (const [key, value] of formData.entries()) {
-                const radioInputs = document.querySelectorAll(`input[name="${key}"]`);
-                const isRadioGroup = radioInputs.length > 0 && Array.from(radioInputs).every(input => input.type === 'radio');
-
-                if (isRadioGroup) {
-                    const selectedRadio = document.querySelector(`input[name="${key}"]:checked`);
-                    if (selectedRadio) result[key] = selectedRadio.value;
-                } else {
-                    const field = currentForm.elements.namedItem(key);
-                    if (field && field.type === 'checkbox') {
-                        if (!result[key]) result[key] = [];
-                        result[key].push(value);
-                    } else {
-                        result[key] = value;
+            input.addEventListener('change', () => {
+                preview.replaceChildren();
+                const files = input.files ? Array.from(input.files) : [];
+                files.forEach(file => {
+                    if (!file.type.startsWith('image/')) {
+                        preview.appendChild(document.createTextNode(file.name));
+                        preview.appendChild(document.createElement('br'));
+                        return;
                     }
-                }
-            }
-        }
 
-        if (includeFiles) {
-            const fileInputs = document.querySelectorAll('input[type="file"]');
-            for (const input of fileInputs) {
-                const files = input.files;
-                if (!files || files.length === 0) {
-                    result[input.name] = '';
-                    continue;
-                }
-
-                if (files.length === 1) {
-                    const file = files[0];
-                    const fileInfo = { name: file.name, type: file.type, size: file.size, lastModified: file.lastModified };
-                    const sizeLimit = 700 * 1024;
-                    if (file.size <= sizeLimit) {
-                        fileInfo.dataUrl = await readFileAsDataURL(file);
-                    }
-                    result[input.name] = fileInfo;
-                } else {
-                    result[input.name] = await Promise.all(Array.from(files).map(async (file) => {
-                        const fileInfo = { name: file.name, type: file.type, size: file.size, lastModified: file.lastModified };
-                        const sizeLimit = 700 * 1024;
-                        if (file.size <= sizeLimit) {
-                            fileInfo.dataUrl = await readFileAsDataURL(file);
-                        }
-                        return fileInfo;
-                    }));
-                }
-            }
-        }
-
-        result.savedAt = new Date().toISOString();
-        return result;
+                    const image = document.createElement('img');
+                    image.alt = input.labels?.[0]?.textContent?.trim() || 'अपलोड की गई फाइल';
+                    image.src = URL.createObjectURL(file);
+                    image.addEventListener('load', () => URL.revokeObjectURL(image.src), { once: true });
+                    preview.appendChild(image);
+                });
+            });
+        });
     }
 
-    function downloadJson(data, filename) {
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1500);
-    }
+    setupFilePreviews();
 
     // --- additional small form behaviours: auto-calc age from dob and show/hide spouse field ---
     (function setupFormHelpers() {
@@ -646,38 +649,38 @@
         forms.forEach(currentForm => currentForm.addEventListener('submit', async function (event) {
             event.preventDefault();
 
-            const finalData = await collectFormData(true);
-
-            // Try to send to server
             try {
-                const resp = await fetch('http://localhost:3000/saveForm', {
+                const resp = await fetch(currentForm.action, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(finalData)
+                    body: new FormData(currentForm)
                 });
 
                 const body = await resp.json();
                 if (resp.ok && body && body.ok) {
                     const status = document.createElement('div');
-                    status.textContent = 'Form saved on server. Files: ' + (body.html || '') + ' ' + (body.pdf || '');
+                    status.textContent = 'फॉर्म सेव हो गया। PDF सेव करने के लिए प्रिंट विंडो में Save as PDF चुनें।';
                     status.style.cssText = 'position:fixed;right:20px;bottom:20px;background:#2e7d32;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:10000;font-family:Arial,sans-serif;';
                     document.body.appendChild(status);
-                    setTimeout(() => status.remove(), 6000);
+                    document.title = 'PACS KYC - ' + (currentForm.elements.namedItem('member_name')?.value || 'Form');
+                    setTimeout(() => {
+                        status.remove();
+                        window.print();
+                    }, 300);
                     return;
                 }
 
                 throw new Error(body && body.error ? body.error : 'Server returned error');
             } catch (err) {
-                console.warn('Server save failed, falling back to local download:', err);
-                // fallback: download JSON locally
-                const fileName = 'pacs_kyc_' + new Date().toISOString().replace(/[:.]/g, '-') + '.json';
-                downloadJson(finalData, fileName);
+                console.warn('Server upload failed; opening the print dialog:', err);
 
                 const status = document.createElement('div');
-                status.textContent = 'Server unavailable — JSON downloaded locally.';
+                status.textContent = 'Server उपलब्ध नहीं है। PDF सेव करने के लिए प्रिंट विंडो में Save as PDF चुनें।';
                 status.style.cssText = 'position:fixed;right:20px;bottom:20px;background:#c0392b;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:10000;font-family:Arial,sans-serif;';
                 document.body.appendChild(status);
-                setTimeout(() => status.remove(), 6000);
+                setTimeout(() => {
+                    status.remove();
+                    window.print();
+                }, 300);
             }
         }));
     }
