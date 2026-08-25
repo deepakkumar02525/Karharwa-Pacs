@@ -218,6 +218,64 @@
             max-width: 300px !important;
             margin-bottom: 0 !important;
         }
+        
+        .voter-id-row {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.voter-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* यह दोनों बॉक्स को लेफ्ट और राइट में बराबर बांटेगा */
+.voter-upload-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* दोनों बॉक्स के बीच की दूरी */
+    width: 100%;
+}
+
+.upload-box {
+    border: 2px dashed #ccc;
+    padding: 15px;
+    text-align: center;
+    border-radius: 5px;
+    flex: 1; /* दोनों बॉक्स को बराबर चौड़ाई (50%-50%) देगा */
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+}
+
+.upload-box:hover {
+    border-color: #007bff; /* माउस ले जाने पर बॉर्डर का रंग बदलेगा */
+}
+
+.upload-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.upload-box p {
+    font-size: 14px;
+    margin: 5px 0 10px 0;
+}
+
+.upload-box input[type="file"] {
+    width: 100%;
+}
+
+/* मोबाइल स्क्रीन के लिए (अगर आप चाहें कि मोबाइल पर ये ऊपर-नीचे हो जाएँ ताकि जगह कम न पड़े) */
+@media (max-width: 480px) {
+    .voter-upload-container {
+        flex-direction: column; /* बहुत छोटे मोबाइल पर ऊपर-नीचे कर देगा */
+    }
+}
+
+
+
+
 
         .pan-mobile-row {
             display: grid;
@@ -583,8 +641,39 @@
                     <input type="file" name="aadhaar_back" accept="image/*" capture="environment" required>
                 </div>
             </div>
+       </div>
 
+<!-- 5. वोटर आईडी कार्ड की छायाप्रति (दोनों साइड अपलोड के साथ - लेफ्ट/राइट लेआउट) -->
+<div class="form-group voter-id-row">
+    <label class="voter-label">वोटर आईडी कार्ड अपलोड करें:-</label>
+    
+    <div class="voter-upload-container">
+        <!-- लेफ्ट साइड: सामने का भाग -->
+        <div class="upload-box">
+            <div class="upload-icon">📸</div>
+            <p>वोटर आईडी का सामने वाला भाग अपलोड करें</p>
+            <input type="file" name="voter_front" accept="image/*" capture="environment" required>
         </div>
+
+        <!-- राइट साइड: पीछे का भाग -->
+        <div class="upload-box">
+            <div class="upload-icon">📸</div>
+            <p>वोटर आईडी का पीछे वाला भाग अपलोड करें</p>
+            <input type="file" name="voter_back" accept="image/*" capture="environment" required>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="pan-mobile-row">
             <!-- PAN Card -->
@@ -708,7 +797,7 @@
                     <input type="text" name="nominee_voter_no" style="flex: 0 0 105px; width: 120px; max-width: 120px; min-width: 0;">
                 </div>
             </div>
-            <div class="inline-item" style="width: 100%; margin-top: 10px;">
+            <div class="inline-block" style="width: 30%; margin-top: 10px;">
                 <label>सदस्य के साथ रिश्ता:-</label>
                 <input type="text" name="nominee_relation">
             </div>
