@@ -620,7 +620,7 @@
     <h2>PACS ERP सदस्यता केवाईसी प्रपत्र</h2>
     <form id="kycForm" action="save.php" method="POST" enctype="multipart/form-data" novalidate>
     <div class="pacs-name-section">
-        पैक्स का नाम:- <input type="text" name="pacs_name" required> पैक्स
+        पैक्स का नाम:- <input type="text" name="pacs_name" value="कड़हरवा" required> पैक्स
     </div>
         
         <!-- 1. सदस्य का नाम -->
@@ -682,7 +682,7 @@
 
 <!-- 5. वोटर आईडी कार्ड की छायाप्रति (दोनों साइड अपलोड के साथ - लेफ्ट/राइट लेआउट) -->
 <div class="form-group voter-id-row">
-    <label class="voter-label">वोटर आईडी कार्ड अपलोड करें:-</label>
+    <label class="voter-label">5. वोटर आईडी कार्ड अपलोड करें:-</label>
     
     <div class="voter-upload-container">
         <!-- लेफ्ट साइड: सामने का भाग -->
@@ -703,15 +703,15 @@
 
 
         <div class="pan-mobile-row">
-            <!-- PAN Card -->
+            <!-- 6. PAN Card -->
             <div class="form-group pan-upload-section" style="flex-direction: column; align-items: flex-start;">
-                <label for="pan_card">PAN Card की छायाप्रति अपलोड करें:</label>
+                <label for="pan_card">6. PAN Card की छायाप्रति अपलोड करें:</label>
                 <input type="file" id="pan_card" name="pan_card" accept="image/*" capture="environment" required>
             </div>
 
-            <!-- 5. मोबाइल संख्या -->
+            <!-- 7. मोबाइल संख्या -->
             <div class="form-group mobile-number-section">
-                <label>5. मोबाइल संख्या:-</label>
+                <label>7. मोबाइल संख्या:-</label>
                 <div class="mobile-number-fields">
                     <div class="inline-item">
                         <label>(01).</label>
@@ -725,11 +725,11 @@
             </div>
         </div>
 
-        <!-- 6. जन्मतिथि, उम्र, वैवाहिक स्थिति -->
+        <!-- 8. जन्मतिथि, उम्र, वैवाहिक स्थिति -->
         <div class="form-group">
             <div class="inline-group">
                 <div class="inline-item">
-                    <label for="dob">6. जन्मतिथि:-</label>
+                    <label for="dob">8. जन्मतिथि:-</label>
                     <input type="date" id="dob" name="dob" required>
                 </div>
                 <div class="inline-item" style="flex: 0.5;">
@@ -747,27 +747,27 @@
             </div>
         </div>
 
-        <!-- 7. पति / पत्नी का नाम -->
+        <!-- 9. पति / पत्नी का नाम -->
         <div class="form-group" id="spouseGroup" style="display:none;">
-            <label for="spouse_name">7. पति / पत्नी का नाम:-</label>
+            <label for="spouse_name">9. पति / पत्नी का नाम:-</label>
             <input type="text" id="spouse_name" name="spouse_name">
         </div>
 
-        <!-- 8. धर्म -->
+        <!-- 10. धर्म -->
         <div class="form-group">
-            <label>8. धर्म:-</label>
+            <label>10. धर्म:-</label>
             <input type="text" name="religion" placeholder="जैसे: हिंदू, मुस्लिम, सिख, ईसाई">
         </div>
 
-        <!-- 9. जाति -->
+        <!-- 11. जाति -->
         <div class="form-group">
-            <label>9. जाति:-</label>
+            <label>11. जाति:-</label>
             <input type="text" name="caste">
         </div>
 
-        <!-- 10. श्रेणी -->
+        <!-- 12. श्रेणी -->
         <div class="form-group">
-            <label>10. श्रेणी:-</label>
+            <label>12. श्रेणी:-</label>
             <select name="category">
                 <option value="">--चुनें--</option>
                 <option value="सामान्य">सामान्य (General)</option>
@@ -778,33 +778,33 @@
             </select>
         </div>
 
-        <!-- 11. व्यवसाय -->
+        <!-- 13. व्यवसाय -->
         <div class="form-group">
-            <label>11. व्यवसाय:-</label>
+            <label>13. व्यवसाय:-</label>
             <input type="text" name="occupation" placeholder="जैसे: खेती, व्यापार, नौकरी">
         </div>
 
-        <!-- 12. शैक्षणिक योग्यता -->
+        <!-- 14. शैक्षणिक योग्यता -->
         <div class="form-group">
-            <label>12. शैक्षणिक योग्यता:-</label>
+            <label>14. शैक्षणिक योग्यता:-</label>
             <input type="text" name="education">
         </div>
 
-        <!-- 13. सहकारी बैंक खाता सं० -->
+        <!-- 15. सहकारी बैंक खाता सं० -->
         <div class="form-group">
-            <label>13. सहकारी बैंक खाता सं०:-</label>
+            <label>15. सहकारी बैंक खाता सं०:-</label>
             <input type="text" name="bank_account_no">
         </div>
 
-        <!-- 14. ई मेल आईडी -->
+        <!-- 16. ई मेल आईडी -->
         <div class="form-group">
-            <label>14. ई मेल आईडी:-</label>
+            <label>16. ई मेल आईडी:-</label>
             <input type="email" name="email">
         </div>
 
-        <!-- 15. मकान सं० और पता -->
+        <!-- 17. मकान सं० और पता -->
         <div class="form-group">
-            <label>15. मकान सं०:-</label>
+            <label>17. मकान सं०:-</label>
             <div class="inline-group house-address-group">
                 <input type="text" name="house_no" style="flex: 0.3;">
                 <div class="inline-item address-field-container" style="flex: 1.7;">
@@ -814,9 +814,9 @@
             </div>
         </div>
 
-        <!-- 16. नॉमिनी विवरण -->
+        <!-- 18. नॉमिनी विवरण -->
         <div class="form-group nominee-section" style="align-items: flex-start; flex-direction: column;">
-            <label>16. नॉमिनी:-</label>
+            <label>18. नॉमिनी:-</label>
             <input type="text" id="nominee_name" name="nominee_name" placeholder="नॉमिनी का नाम">
             <div class="inline-group" style="width: 100%;">
                 <div class="inline-item nominee-voter-field">
@@ -830,7 +830,7 @@
             </div>
         </div>
 
-        <!-- 17. जमीन संबंधी ब्यौरा -->
+        <!-- 19. जमीन संबंधी ब्यौरा -->
 
     <title>पैक्स सदस्य - जमीन संबंधी ब्यौरा (KYC)</title>
     <style>
@@ -958,7 +958,7 @@
 <body>
 
 <div class="form-container">
-    <h2>पैक्स सदस्य - जमीन संबंधी ब्यौरा (KYC)</h2>
+    <h2>19. पैक्स सदस्य - जमीन संबंधी ब्यौरा (KYC)</h2>
     
     
 
