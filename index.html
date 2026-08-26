@@ -372,14 +372,14 @@
         .file-preview {
             margin-top: 10px;
             width: 100%;
-            min-height: 72px;
+            min-height: 180px;
             padding: 10px;
             box-sizing: border-box;
             border: 1px dashed #aaa;
             border-radius: 5px;
             background: #fafafa;
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: minmax(0, 1fr);
             gap: 12px;
         }
 
@@ -423,9 +423,34 @@
         .file-preview img {
             display: block;
             max-width: 100%;
-            max-height: 420px;
+            max-height: 600px;
             width: 100%;
+            height: auto;
             object-fit: contain;
+            border: 1px solid #ccc;
+        }
+
+        .aadhaar-upload-container .upload-box,
+        .voter-upload-container .upload-box,
+        .pan-upload-section {
+            border: 0;
+            padding: 0;
+            background: transparent;
+        }
+
+        .aadhaar-upload-container .file-preview,
+        .voter-upload-container .file-preview,
+        .pan-upload-section .file-preview {
+            min-height: 180px;
+            padding: 10px;
+            border: 1px dashed #aaa;
+            background: #fafafa;
+        }
+
+        .aadhaar-upload-container .file-preview img,
+        .voter-upload-container .file-preview img,
+        .pan-upload-section .file-preview img {
+            max-height: 700px;
             border: 1px solid #ccc;
         }
 
@@ -556,16 +581,28 @@
         }
 
         @media print {
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
             body {
                 background: #fff;
                 padding: 0;
+                width: auto;
             }
 
             .form-container {
-                max-width: none;
+                width: 190mm;
+                max-width: 190mm;
+                min-height: 277mm;
                 border: 0;
                 box-shadow: none;
                 padding: 0;
+            }
+
+            .file-preview img {
+                max-height: 90mm;
             }
 
             .submit-section,
@@ -1324,6 +1361,8 @@
             signature: 'सदस्य का हस्ताक्षर या निशान यहां दिखेगा',
             aadhaar_front: 'आधार का सामने वाला भाग यहां दिखेगा',
             aadhaar_back: 'आधार का पीछे वाला भाग यहां दिखेगा',
+            voter_front: 'वोटर आईडी का सामने वाला भाग यहां दिखेगा',
+            voter_back: 'वोटर आईडी का पीछे वाला भाग यहां दिखेगा',
             pan_card: 'PAN Card यहां दिखेगा',
             'land_receipt[]': 'जमीन की रसीद यहां दिखेगी'
         };
@@ -1543,8 +1582,14 @@
         URL.revokeObjectURL(link.href);
     }
 
+    function setPdfDocumentTitle(form) {
+        const memberName = getFormValue(form, 'member_name').trim();
+        const safeMemberName = (memberName || 'Form').replace(/[\\/:*?"<>|]/g, '_');
+        document.title = 'PACS_KYC_' + safeMemberName;
+    }
+
     function saveFormAsPdf(form) {
-        document.title = 'PACS KYC - ' + (getFormValue(form, 'member_name') || 'Form');
+        setPdfDocumentTitle(form);
         window.print();
     }
 
@@ -1623,7 +1668,7 @@
                     status.textContent = 'फॉर्म सेव हो गया। PDF सेव करने के लिए प्रिंट विंडो में Save as PDF चुनें।';
                     status.style.cssText = 'position:fixed;right:20px;bottom:20px;background:#2e7d32;color:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:10000;font-family:Arial,sans-serif;';
                     document.body.appendChild(status);
-                    document.title = 'PACS KYC - ' + (currentForm.elements.namedItem('member_name')?.value || 'Form');
+                    setPdfDocumentTitle(currentForm);
                     setTimeout(() => {
                         status.remove();
                         window.print();
